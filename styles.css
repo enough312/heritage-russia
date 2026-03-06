@@ -82,14 +82,6 @@ button {
   top: 0;
   z-index: 30;
   padding: 14px 0 0;
-  transition: transform 0.28s ease, opacity 0.28s ease;
-  will-change: transform;
-}
-
-.site-header.is-hidden {
-  transform: translateY(calc(-100% - 18px));
-  opacity: 0;
-  pointer-events: none;
 }
 
 .site-header__inner,
@@ -119,11 +111,19 @@ button {
   gap: 18px;
 }
 
+.site-header__controls {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
 .site-header__contacts {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  flex-shrink: 0;
 }
 
 .brand {
@@ -182,11 +182,45 @@ button {
   transform: translateY(-1px);
 }
 
+.header-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  border: 1px solid rgba(194, 156, 84, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 252, 246, 0.72);
+  color: var(--accent-deep);
+  font-weight: 700;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.header-toggle:hover,
+.header-toggle:focus-visible {
+  background: rgba(194, 156, 84, 0.14);
+  border-color: rgba(194, 156, 84, 0.45);
+  transform: translateY(-1px);
+}
+
 .site-nav {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
+  max-height: 280px;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.25s ease, transform 0.25s ease, padding-top 0.25s ease;
+}
+
+.site-header__inner.is-nav-collapsed {
+  gap: 0;
+}
+
+.site-header__inner.is-nav-collapsed .site-nav {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
 }
 
 .site-nav__link {
@@ -829,12 +863,24 @@ main {
   background: #1f1b18;
 }
 
+.player-shell.is-empty {
+  display: none;
+}
+
 .player-shell__empty {
   margin: 14px 0 0;
   font-size: 0.92rem;
 }
 
 .player-shell.is-ready .player-shell__empty {
+  display: none;
+}
+
+.player-shell.is-empty + .player-shell__actions {
+  margin-top: 0;
+}
+
+.player-shell.is-empty + .player-shell__actions [data-media-fullscreen] {
   display: none;
 }
 
@@ -1265,8 +1311,13 @@ main {
     align-items: flex-start;
   }
 
-  .site-header__contacts {
+  .site-header__controls {
     width: 100%;
+    justify-content: space-between;
+  }
+
+  .site-header__contacts {
+    width: auto;
     justify-content: flex-start;
   }
 
@@ -1274,6 +1325,7 @@ main {
     display: flex;
     align-items: flex-start;
     gap: 8px;
+    max-height: 380px;
     padding-top: 2px;
   }
 
@@ -1317,6 +1369,14 @@ main {
 
   .site-header__contacts {
     gap: 8px;
+  }
+
+  .site-header__controls {
+    gap: 8px;
+  }
+
+  .header-toggle {
+    padding: 9px 12px;
   }
 
   main {

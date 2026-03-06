@@ -55,6 +55,7 @@
   };
 
   const TELEGRAM_PREFIX = "https://t.me/";
+  const HEADER_COLLAPSE_KEY = "heritageHeaderCollapsed";
 
   document.addEventListener("DOMContentLoaded", function () {
     const pageId = document.body.dataset.page || "home";
@@ -70,7 +71,7 @@
     renderRoutes();
     renderPreservation();
     initNavigation();
-    initHeaderScroll();
+    initHeaderToggle();
     initHints();
     initMediaInteractions();
     initReveal();
@@ -100,9 +101,12 @@
                 <span class="brand__subtitle">${escapeHtml(content.site.subtitle)}</span>
               </span>
             </a>
-            <div class="site-header__contacts" aria-label="Контакты автора">
-              <a class="contact-pill" href="mailto:${escapeHtml(content.site.feedback.email)}">Почта</a>
-              <a class="contact-pill" href="${escapeHtml(tgLink)}" target="_blank" rel="noreferrer">Telegram</a>
+            <div class="site-header__controls">
+              <div class="site-header__contacts" aria-label="Контакты автора">
+                <a class="contact-pill" href="mailto:${escapeHtml(content.site.feedback.email)}">Почта</a>
+                <a class="contact-pill" href="${escapeHtml(tgLink)}" target="_blank" rel="noreferrer">Telegram</a>
+              </div>
+              <button class="header-toggle" type="button" data-header-toggle aria-controls="site-nav" aria-expanded="true">Скрыть вкладки</button>
             </div>
           </div>
           <nav id="site-nav" class="site-nav" aria-label="Основная навигация">
@@ -412,7 +416,6 @@
                 </div>
                 <div class="player-shell">
                   <video class="player-shell__media" controls playsinline preload="metadata" data-candidates="${escapeAttribute(videoCandidates.join("|"))}"></video>
-                  <p class="player-shell__empty">Медиафайл для этого фольклора можно положить рядом с проектом. Карточка автоматически попробует открыть файл с подходящим названием.</p>
                 </div>
                 <div class="player-shell__actions">
                   <button class="button button--secondary" type="button" data-media-fullscreen>Полный экран</button>
@@ -671,6 +674,9 @@
 
   function loadMediaCandidate(media, candidates, index) {
     if (!media || !candidates.length || index >= candidates.length) {
+      media.removeAttribute("src");
+      media.removeAttribute("controls");
+      media.load();
       media.closest(".player-shell")?.classList.add("is-empty");
       return;
     }
@@ -785,36 +791,40 @@
     return `${TELEGRAM_PREFIX}${raw.replace(/^@/, "")}`;
   }
 
-  function initHeaderScroll() {
-    const header = document.querySelector(".site-header");
+  function initHeaderToggle() {
+    const headerInner = document.querySelector(".site-header__inner");
+    const toggleButton = document.querySelector("[data-header-toggle]");
 
-    if (!header) {
+    if (!headerInner || !toggleButton) {
       return;
     }
 
-    let lastScrollY = window.scrollY;
-    let isTicking = false;
+    function applyCollapsedState(isCollapsed) {
+      headerInner.classList.toggle("is-nav-collapsed", isCollapsed);
+      toggleButton.setAttribute("aria-expanded", String(!isCollapsed));
+      toggleButton.textContent = isCollapsed ? "Показать вкладки" : "Скрыть вкладки";
+    }
 
-    window.addEventListener("scroll", function () {
-      if (isTicking) {
+    let isCollapsed = false;
+
+    try {
+      isCollapsed = window.localStorage.getItem(HEADER_COLLAPSE_KEY) === "1";
+    } catch (error) {
+      isCollapsed = false;
+    }
+
+    applyCollapsedState(isCollapsed);
+
+    toggleButton.addEventListener("click", function () {
+      isCollapsed = !headerInner.classList.contains("is-nav-collapsed");
+      applyCollapsedState(isCollapsed);
+
+      try {
+        window.localStorage.setItem(HEADER_COLLAPSE_KEY, isCollapsed ? "1" : "0");
+      } catch (error) {
         return;
       }
-
-      isTicking = true;
-      window.requestAnimationFrame(function () {
-        const currentScrollY = window.scrollY;
-        const delta = currentScrollY - lastScrollY;
-
-        if (document.body.classList.contains("lightbox-open") || currentScrollY <= 24 || delta < -6) {
-          header.classList.remove("is-hidden");
-        } else if (delta > 8 && currentScrollY > 140) {
-          header.classList.add("is-hidden");
-        }
-
-        lastScrollY = currentScrollY;
-        isTicking = false;
-      });
-    }, { passive: true });
+    });
   }
 
   function initReveal() {
