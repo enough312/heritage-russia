@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Многостраничный сайт о культурном наследии народов России: народы, традиции, ремесла, кухня, музыка, маршруты и способы сохранения памяти поколений.">
+  <title>Культурное наследие народов России</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="home">
+  <header id="site-header" class="site-header"></header>
+  <main>
+    <section class="hero" data-reveal>
+      <div class="hero__content">
+        <p class="hero__eyebrow">Конкурсный сайт по web-конструированию</p>
+        <h1>Культурное наследие народов России</h1>
+        <p class="hero__lead">
+          Этот сайт показывает Россию как пространство культурного диалога. Здесь собраны
+          народы, праздники, ремесла, кухня, музыка, маршруты и современные способы
+          сохранения памяти, чтобы увидеть: наследие живет не в прошлом, а рядом с нами.
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="peoples.html">Начать с народов</a>
+          <a class="button button--secondary" href="routes.html">Открыть маршруты</a>
+        </div>
+      </div>
+      <div class="hero__visual">
+        <img src="assets/hero-home.svg" alt="Иллюстрация культурного атласа России">
+      </div>
+    </section>
+
+    <section class="page-note" data-reveal>
+      <div class="page-note__text">
+        <strong>Как устроен сайт:</strong> переходите по 8 страницам, используйте фильтры,
+        подсказки и галереи, чтобы сравнивать традиции разных регионов.
+      </div>
+      <button class="hint" type="button" aria-expanded="false">
+        <span class="hint__icon">i</span>
+        <span class="hint__text">Что искать в разделах</span>
+        <span class="hint__bubble">Обращайте внимание не только на факты, но и на связи: как орнамент связан с домом, музыка с праздником, а кухня с природой и образом жизни.</span>
+      </button>
+    </section>
+
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Панорама</p>
+        <h2>Большая карта культурного многообразия</h2>
+        <p>
+          Сайт охватывает северные территории, Поволжье, Кавказ, Сибирь и Арктику. Он показывает,
+          что культурное наследие состоит не из разрозненных фактов, а из живой системы символов,
+          маршрутов, обрядов, ремесел и семейной памяти.
+        </p>
+      </div>
+      <div id="home-stats" class="stats-grid"></div>
+      <div id="home-regions" class="feature-grid"></div>
+    </section>
+
+    <section class="section section--contrast" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Визуальные акценты</p>
+        <h2>Наследие можно увидеть</h2>
+        <p>
+          Помимо текстов, на сайте появились иллюстрации и тематические визуальные карточки,
+          чтобы разделы воспринимались не как учебник, а как настоящий цифровой культурный маршрут.
+        </p>
+      </div>
+      <div class="media-grid">
+        <article class="media-card">
+          <img src="assets/gallery-north.svg" alt="Северный дом и берестяной орнамент">
+          <div class="media-card__body">
+            <h3>Север</h3>
+            <p>Деревянная архитектура, береста, тихая эпическая интонация и ритм северного дома.</p>
+          </div>
+        </article>
+        <article class="media-card">
+          <img src="assets/gallery-volga.svg" alt="Орнаменты и праздничная культура Поволжья">
+          <div class="media-card__body">
+            <h3>Поволжье</h3>
+            <p>Орнаменты, яркие праздники, семейный стол и культура ремесленной точности.</p>
+          </div>
+        </article>
+        <article class="media-card">
+          <img src="assets/gallery-siberia.svg" alt="Сибирские праздники и декоративные мотивы">
+          <div class="media-card__body">
+            <h3>Сибирь</h3>
+            <p>Круговые танцы, эпос, серебряное искусство и северная художественная пластика.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Маршрут по сайту</p>
+        <h2>От знакомства к осмыслению</h2>
+      </div>
+      <div id="home-spotlights" class="card-grid"></div>
+    </section>
+
+    <section class="section section--contrast" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Почему это важно</p>
+        <h2>Культура объединяет страну через уважение</h2>
+      </div>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3>Память о корнях</h3>
+          <p>Традиции помогают понять историю семьи, родного края и культурные коды собственной малой родины.</p>
+        </article>
+        <article class="story-card">
+          <h3>Диалог народов</h3>
+          <p>Знакомство с культурой соседей снижает дистанцию, развивает уважение и помогает видеть ценность различий.</p>
+        </article>
+        <article class="story-card">
+          <h3>Живое наследие</h3>
+          <p>Праздник, ремесло и музыка важны не только как история, но и как часть современной жизни, образования и городской среды.</p>
+        </article>
+        <article class="story-card">
+          <h3>Цифровое сохранение</h3>
+          <p>Сайт, архив, подкаст или интерактивная карта могут стать современным способом бережно продолжить традицию.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <noscript>
+    <div class="noscript-banner">Для интерактивных блоков нужен JavaScript. Основной контент и ссылки остаются доступны.</div>
+  </noscript>
+
+  <script defer src="content.js"></script>
+  <script defer src="app.js"></script>
+</body>
+</html>

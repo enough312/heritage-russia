@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Музыка, танец и эпос народов России: курай, олонхо, ёхор, руническое пение и другие культурные формы.">
+  <title>Музыка и эпос | Культурное наследие народов России</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="music">
+  <header id="site-header" class="site-header"></header>
+  <main>
+    <section class="hero" data-reveal>
+      <div class="hero__content">
+        <p class="hero__eyebrow">Раздел 5</p>
+        <h1>Музыка, танец и эпос</h1>
+        <p class="hero__lead">
+          Музыка делает наследие слышимым. Через инструмент, песню, круговой танец или эпическое слово
+          культура передает интонацию народа, ритм пространства и образ памяти.
+        </p>
+      </div>
+      <div class="hero__visual">
+        <img src="assets/hero-music.svg" alt="Иллюстрация музыкальных инструментов и эпоса">
+      </div>
+    </section>
+
+    <section class="page-note" data-reveal>
+      <div class="page-note__text">
+        <strong>Как смотреть раздел:</strong> сравнивай не только инструменты, но и формы исполнения:
+        песню, танец, круговой ритуал, эпос и личную песенную память.
+      </div>
+      <button class="hint" type="button" aria-expanded="false">
+        <span class="hint__icon">i</span>
+        <span class="hint__text">Почему эпос важен</span>
+        <span class="hint__bubble">Эпос хранит коллективную память, нравственные ориентиры и художественный язык народа, поэтому он считается важной формой нематериального наследия.</span>
+      </button>
+    </section>
+
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Звучащая карта</p>
+        <h2>Формы, в которых говорит культура</h2>
+      </div>
+      <div id="music-grid" class="card-grid"></div>
+    </section>
+
+    <section class="section section--contrast" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Визуальные сюжеты</p>
+        <h2>Инструмент, круг, слово</h2>
+      </div>
+      <div class="media-grid">
+        <article class="media-card">
+          <img src="assets/gallery-siberia.svg" alt="Круговой танец и степной орнамент">
+          <div class="media-card__body">
+            <h3>Круговой ритм</h3>
+            <p>Танец подчеркивает, что музыка часто живет не отдельно, а внутри общего действия и сообщества.</p>
+          </div>
+        </article>
+        <article class="media-card">
+          <img src="assets/gallery-volga.svg" alt="Песенная культура Поволжья">
+          <div class="media-card__body">
+            <h3>Песенная лирика</h3>
+            <p>В Поволжье музыкальная традиция тесно связана со словом, городской культурой и семейной памятью.</p>
+          </div>
+        </article>
+        <article class="media-card">
+          <img src="assets/gallery-caucasus.svg" alt="Танец и пластика Кавказа">
+          <div class="media-card__body">
+            <h3>Пластика танца</h3>
+            <p>Кавказский танец передает достоинство, внутреннюю силу и чувство культурной меры.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Четыре наблюдения</p>
+        <h2>Что хранит музыкальная традиция</h2>
+      </div>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3>Интонацию места</h3>
+          <p>Звук инструмента часто отражает ландшафт: степь, северное пространство, горный рельеф или арктическую тишину.</p>
+        </article>
+        <article class="story-card">
+          <h3>Коллективное действие</h3>
+          <p>Танец и круговой ритуал показывают, что музыка помогает сообществу переживать единство.</p>
+        </article>
+        <article class="story-card">
+          <h3>Слово и память</h3>
+          <p>Эпос и песня передают культурную память так же сильно, как архитектура или музейный предмет.</p>
+        </article>
+        <article class="story-card">
+          <h3>Современное продолжение</h3>
+          <p>Сегодня музыкальное наследие звучит и на сцене, и в цифровых архивах, и в школьных проектах.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <noscript>
+    <div class="noscript-banner">Для интерактивных блоков нужен JavaScript. Основной контент и ссылки остаются доступны.</div>
+  </noscript>
+
+  <script defer src="content.js"></script>
+  <script defer src="app.js"></script>
+</body>
+</html>

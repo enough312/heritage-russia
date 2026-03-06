@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Культурные маршруты по России: музеи, этнографические площадки, семейные архивы и цифровые маршруты наследия.">
+  <title>Культурные маршруты | Культурное наследие народов России</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="routes">
+  <header id="site-header" class="site-header"></header>
+  <main>
+    <section class="hero" data-reveal>
+      <div class="hero__content">
+        <p class="hero__eyebrow">Раздел 6</p>
+        <h1>Культурные маршруты</h1>
+        <p class="hero__lead">
+          Наследие можно изучать не только по книгам. Маршрут по музею, этнопарку, горному селению,
+          школьному архиву или цифровой карте помогает увидеть культуру как пространство движения,
+          встречи и личного открытия.
+        </p>
+      </div>
+      <div class="hero__visual">
+        <img src="assets/hero-routes.svg" alt="Иллюстрация карты культурных маршрутов">
+      </div>
+    </section>
+
+    <section class="page-note" data-reveal>
+      <div class="page-note__text">
+        <strong>Как использовать раздел:</strong> маршрут можно воспринимать как идею для путешествия,
+        школьного проекта, виртуальной экскурсии или локального исследования своей малой родины.
+      </div>
+      <button class="hint" type="button" aria-expanded="false">
+        <span class="hint__icon">i</span>
+        <span class="hint__text">Что такое цифровой маршрут</span>
+        <span class="hint__bubble">Это путь по культуре через сайты музеев, онлайн-карты, архивы, аудиоинтервью и виртуальные выставки, который можно пройти даже без поездки.</span>
+      </button>
+    </section>
+
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Маршруты</p>
+        <h2>Восемь способов увидеть наследие</h2>
+      </div>
+      <div id="routes-grid" class="card-grid"></div>
+    </section>
+
+    <section class="section section--contrast" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Визуальная карта</p>
+        <h2>От музея до семейного архива</h2>
+      </div>
+      <div class="media-grid">
+        <article class="media-card">
+          <img src="assets/gallery-north.svg" alt="Северный маршрут музеев под открытым небом">
+          <div class="media-card__body">
+            <h3>Маршрут пространства</h3>
+            <p>Архитектура и музейная среда помогают почувствовать культуру в реальном масштабе.</p>
+          </div>
+        </article>
+        <article class="media-card">
+          <img src="assets/gallery-volga.svg" alt="Маршрут по городам Поволжья">
+          <div class="media-card__body">
+            <h3>Маршрут праздника</h3>
+            <p>Города и села Поволжья хорошо показывают, как ремесло и праздник входят в современную жизнь.</p>
+          </div>
+        </article>
+        <article class="media-card">
+          <img src="assets/gallery-arctic.svg" alt="Маршрут арктической культуры">
+          <div class="media-card__body">
+            <h3>Маршрут среды</h3>
+            <p>Арктический путь помогает понять, как ландшафт буквально формирует культуру.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Как смотреть уважительно</p>
+        <h2>Четыре правила культурного маршрута</h2>
+      </div>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3>Не сводить культуру к экзотике</h3>
+          <p>Важно видеть в традиции не «редкость», а полноценный живой мир со своей логикой и достоинством.</p>
+        </article>
+        <article class="story-card">
+          <h3>Слушать носителей традиции</h3>
+          <p>Личный рассказ мастера, жителя или сотрудника музея часто важнее, чем поверхностный набор фактов.</p>
+        </article>
+        <article class="story-card">
+          <h3>Замечать детали среды</h3>
+          <p>Дом, пейзаж, орнамент, еда и звук вместе создают тот культурный контекст, который нельзя разделять.</p>
+        </article>
+        <article class="story-card">
+          <h3>Переходить к действию</h3>
+          <p>После маршрута можно сделать мини-гид, фотоисторию, карту или школьную выставку — и тем самым продолжить тему.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <noscript>
+    <div class="noscript-banner">Для интерактивных блоков нужен JavaScript. Основной контент и ссылки остаются доступны.</div>
+  </noscript>
+
+  <script defer src="content.js"></script>
+  <script defer src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<svg width="900" height="620" viewBox="0 0 900 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="620" rx="40" fill="#F7EFE6"/>
+  <rect x="96" y="116" width="708" height="388" rx="36" fill="#FFF8EF" stroke="#D6B48D" stroke-width="4"/>
+  <circle cx="190" cy="194" r="44" fill="#B45F3F" fill-opacity="0.18"/>
+  <circle cx="350" cy="194" r="44" fill="#C29C54" fill-opacity="0.18"/>
+  <circle cx="510" cy="194" r="44" fill="#496F81" fill-opacity="0.18"/>
+  <circle cx="670" cy="194" r="44" fill="#2F5648" fill-opacity="0.18"/>
+  <circle cx="190" cy="190" r="24" fill="#B45F3F"/>
+  <circle cx="350" cy="190" r="24" fill="#C29C54"/>
+  <circle cx="510" cy="190" r="24" fill="#496F81"/>
+  <circle cx="670" cy="190" r="24" fill="#2F5648"/>
+  <path d="M160 252C160 221.072 185.072 196 216 196H164C194.928 196 220 221.072 220 252V326H160V252Z" fill="#D9A489"/>
+  <path d="M320 252C320 221.072 345.072 196 376 196H324C354.928 196 380 221.072 380 252V326H320V252Z" fill="#E6D18E"/>
+  <path d="M480 252C480 221.072 505.072 196 536 196H484C514.928 196 540 221.072 540 252V326H480V252Z" fill="#A7C3CF"/>
+  <path d="M640 252C640 221.072 665.072 196 696 196H644C674.928 196 700 221.072 700 252V326H640V252Z" fill="#A6C1B2"/>
+  <rect x="162" y="326" width="56" height="92" rx="16" fill="#B45F3F"/>
+  <rect x="322" y="326" width="56" height="92" rx="16" fill="#C29C54"/>
+  <rect x="482" y="326" width="56" height="92" rx="16" fill="#496F81"/>
+  <rect x="642" y="326" width="56" height="92" rx="16" fill="#2F5648"/>
+  <path d="M160 358H220" stroke="#FFF4EA" stroke-width="6" stroke-linecap="round"/>
+  <path d="M320 358H380" stroke="#FFF4EA" stroke-width="6" stroke-linecap="round"/>
+  <path d="M480 358H540" stroke="#EFF7FA" stroke-width="6" stroke-linecap="round"/>
+  <path d="M640 358H700" stroke="#EFF6F1" stroke-width="6" stroke-linecap="round"/>
+  <path d="M170 454C250 422 340 410 450 410C560 410 652 422 730 454" stroke="#8F4326" stroke-width="7" stroke-linecap="round"/>
+  <path d="M150 470C242 508 340 526 450 526C560 526 658 508 750 470" stroke="#2F5648" stroke-width="7" stroke-linecap="round"/>
+</svg>
