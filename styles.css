@@ -1067,7 +1067,7 @@ main {
   grid-template-columns: minmax(0, 1.18fr) minmax(320px, 0.82fr);
   gap: 18px;
   margin-top: 26px;
-  align-items: stretch;
+  align-items: start;
 }
 
 .cultural-map,
@@ -1084,27 +1084,27 @@ main {
 
 .cultural-map {
   padding: 18px;
-  min-height: 420px;
+  min-height: 0;
   background: rgba(249, 249, 248, 0.94);
 }
 
 .cultural-map__board {
   position: relative;
-  min-height: 380px;
-  height: 100%;
+  min-height: 0;
+  aspect-ratio: 2 / 1;
   border-radius: 22px;
   overflow: hidden;
-  background: linear-gradient(180deg, #ddddde, #d6d6d7);
+  background: linear-gradient(180deg, #d9d9dc, #d2d2d6);
 }
 
 .cultural-map__image {
   position: absolute;
-  inset: 26px 28px;
-  width: calc(100% - 56px);
-  height: calc(100% - 52px);
+  inset: 18px 20px 16px;
+  width: calc(100% - 40px);
+  height: calc(100% - 34px);
   object-fit: contain;
   object-position: center;
-  filter: drop-shadow(0 5px 7px rgba(64, 64, 72, 0.18));
+  filter: drop-shadow(0 8px 12px rgba(64, 64, 72, 0.16));
 }
 
 .map-spot {
@@ -1808,18 +1808,17 @@ main {
   }
 
   .cultural-map {
-    min-height: 360px;
     padding: 12px;
   }
 
   .cultural-map__board {
-    min-height: 332px;
+    aspect-ratio: 1.52 / 1;
   }
 
   .cultural-map__image {
-    inset: 18px 16px;
-    width: calc(100% - 32px);
-    height: calc(100% - 36px);
+    inset: 16px 14px 12px;
+    width: calc(100% - 28px);
+    height: calc(100% - 28px);
   }
 
   .map-spot {

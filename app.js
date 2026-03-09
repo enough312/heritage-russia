@@ -202,7 +202,7 @@
 
       mapContainer.innerHTML = `
         <div class="cultural-map__board" data-parallax-factor="0.08">
-          <img class="cultural-map__image" src="assets/russia-map.svg?v=20260309map2" alt="Карта России с отмеченными культурными регионами">
+          <img class="cultural-map__image" src="assets/russia-map.svg?v=20260309map3" alt="Карта России с отмеченными культурными регионами">
           ${content.mapRegions.map(function (region) {
             const activeClass = region.id === firstRegion.id ? " is-active" : "";
             return `
