@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260309fix">
-  <link rel="icon" href="favicon.svg?v=20260309fix" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=20260309contest1">
+  <link rel="icon" href="favicon.svg?v=20260309contest1" type="image/svg+xml">
 </head>
 <body data-page="home">
   <header id="site-header" class="site-header"></header>
@@ -35,14 +35,26 @@
 
     <section class="page-note" data-reveal>
       <div class="page-note__text">
-        <strong>Как устроен сайт:</strong> переходите по 8 страницам, используйте фильтры,
-        подсказки и галереи, чтобы сравнивать традиции разных регионов.
+        <strong>Как устроен сайт:</strong> переходите по 9 страницам, используйте карту,
+        сравнение культур, подсказки и галереи, чтобы видеть связи между регионами и традициями.
       </div>
       <button class="hint" type="button" aria-expanded="false">
         <span class="hint__icon">i</span>
         <span class="hint__text">Что искать в разделах</span>
         <span class="hint__bubble">Обращайте внимание не только на факты, но и на связи: как орнамент связан с домом, музыка с праздником, а кухня с природой и образом жизни.</span>
       </button>
+    </section>
+
+    <section class="section section--contrast" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Проект для конкурса</p>
+        <h2>Сайт задуман как цифровая выставка и исследование</h2>
+        <p>
+          Здесь соединены содержательная часть, визуальная логика, интерактивная навигация и
+          идея уважительного разговора о многообразии культур России.
+        </p>
+      </div>
+      <div id="home-project-pillars" class="feature-grid"></div>
     </section>
 
     <section class="section" data-reveal>
@@ -56,7 +68,10 @@
         </p>
       </div>
       <div id="home-stats" class="stats-grid"></div>
-      <div id="home-regions" class="feature-grid"></div>
+      <div class="cultural-map-layout">
+        <div id="home-cultural-map" class="cultural-map"></div>
+        <aside id="home-map-panel" class="map-panel"></aside>
+      </div>
     </section>
 
     <section class="section section--contrast" data-reveal>
@@ -101,6 +116,34 @@
       <div id="home-spotlights" class="card-grid"></div>
     </section>
 
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Молодежь и культура</p>
+        <h2>Почему тема важна именно сейчас</h2>
+        <p>
+          Культурное наследие нужно не только для урока истории. Оно помогает молодым людям
+          говорить о своей стране глубже, видеть ценность различий и создавать собственные медиапроекты.
+        </p>
+      </div>
+      <div id="home-youth-grid" class="story-grid"></div>
+    </section>
+
+    <section class="section section--contrast" data-reveal>
+      <div class="section-heading">
+        <p class="section-heading__eyebrow">Источники и медиатека</p>
+        <h2>За сайтом стоит реальная исследовательская база</h2>
+        <p>
+          Отдельный раздел показывает, на какие типы материалов можно опираться, если делать
+          сайт о культуре серьезно, аккуратно и убедительно.
+        </p>
+      </div>
+      <div id="home-sources-preview" class="card-grid"></div>
+      <div class="section-actions">
+        <a class="button button--primary" href="sources.html">Открыть страницу источников</a>
+        <a class="button button--secondary" href="preservation.html">Перейти к сохранению наследия</a>
+      </div>
+    </section>
+
     <section class="section section--contrast" data-reveal>
       <div class="section-heading">
         <p class="section-heading__eyebrow">Почему это важно</p>
@@ -132,7 +175,7 @@
     <div class="noscript-banner">Для интерактивных блоков нужен JavaScript. Основной контент и ссылки остаются доступны.</div>
   </noscript>
 
-  <script defer src="content.js?v=20260309fix"></script>
-  <script defer src="app.js?v=20260309fix2"></script>
+  <script defer src="content.js?v=20260309contest1"></script>
+  <script defer src="app.js?v=20260309contest1"></script>
 </body>
 </html>

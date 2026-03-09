@@ -56,11 +56,15 @@
     renderMusic();
     renderRoutes();
     renderPreservation();
+    renderSources();
+    renderPageTakeaway(pageId);
     initNavigation();
     initHeaderToggle();
     initHints();
     initMediaInteractions();
     initReveal();
+    initCounters();
+    initParallax();
   });
 
   function renderSiteShell(pageId) {
@@ -145,15 +149,31 @@
 
   function renderHome() {
     const statsContainer = document.getElementById("home-stats");
-    const regionsContainer = document.getElementById("home-regions");
+    const projectContainer = document.getElementById("home-project-pillars");
+    const mapContainer = document.getElementById("home-cultural-map");
+    const mapPanel = document.getElementById("home-map-panel");
     const spotlightsContainer = document.getElementById("home-spotlights");
+    const youthContainer = document.getElementById("home-youth-grid");
+    const sourcesContainer = document.getElementById("home-sources-preview");
 
     if (statsContainer) {
-      statsContainer.innerHTML = content.site.stats
+      const stats = content.site.stats.map(function (stat, index) {
+        if (index !== 0) {
+          return stat;
+        }
+
+        return {
+          value: String(content.pages.length),
+          label: stat.label
+        };
+      });
+
+      statsContainer.innerHTML = stats
         .map(function (stat) {
+          const counter = splitCounterValue(stat.value);
           return `
             <article class="stat-card" data-reveal>
-              <span class="stat-card__value">${escapeHtml(stat.value)}</span>
+              <span class="stat-card__value" data-counter="${escapeAttribute(String(counter.value))}" data-counter-suffix="${escapeAttribute(counter.suffix)}">${escapeHtml(stat.value)}</span>
               <span class="stat-card__label">${escapeHtml(stat.label)}</span>
             </article>
           `;
@@ -161,23 +181,70 @@
         .join("");
     }
 
-    if (regionsContainer) {
-      const grouped = groupBy(content.peoples, "macroRegion");
-      regionsContainer.innerHTML = Object.keys(grouped)
-        .map(function (region) {
-          const peoples = grouped[region];
+    if (projectContainer) {
+      projectContainer.innerHTML = content.project.pillars
+        .map(function (item) {
           return `
             <article class="feature-card" data-reveal>
               <div class="feature-card__topline">
-                <span class="badge">${escapeHtml(region)}</span>
-                <span class="token">${peoples.length} культурных акцента</span>
+                <span class="badge">${escapeHtml(item.subtitle)}</span>
               </div>
-              <h3>${escapeHtml(region)}</h3>
-              <p>${escapeHtml(peoples.map(function (item) { return item.name; }).join(", "))}.</p>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.description)}</p>
             </article>
           `;
         })
         .join("");
+    }
+
+    if (mapContainer && mapPanel) {
+      const firstRegion = content.mapRegions[0];
+
+      mapContainer.innerHTML = `
+        <div class="cultural-map__board" data-parallax-factor="0.08">
+          <svg class="cultural-map__shape" viewBox="0 0 860 430" aria-hidden="true">
+            <path d="M104 162c34-36 92-54 162-52 36 1 70-17 98-50 34-40 83-56 146-44 57 10 106 37 149 82 45 48 77 57 128 38 20-7 45-2 59 15 18 21 15 52-6 71-17 14-23 31-18 49 9 35-14 67-49 67H630c-48 0-76 11-111 45-33 32-70 47-112 47-53 0-94-19-124-58-24-30-58-46-101-46-52 0-92-17-117-49-30-38-26-89 9-115 16-12 25-28 25-48 0-23 10-41 30-52z" />
+            <path d="M228 274c38-12 78-14 118-5 32 7 58 4 84-10 22-12 47-19 74-19 33 0 63 10 88 30 25 19 56 27 93 24 31-3 59-13 86-30" />
+            <path d="M344 126c19 18 40 29 63 34 29 6 53 3 73-10 26-17 53-24 82-20 27 4 53 15 76 33" />
+          </svg>
+          ${content.mapRegions.map(function (region) {
+            const activeClass = region.id === firstRegion.id ? " is-active" : "";
+            return `
+              <button class="map-spot${activeClass}" type="button" data-map-spot="${escapeAttribute(region.id)}" style="left:${escapeAttribute(String(region.x))}%; top:${escapeAttribute(String(region.y))}%; --spot-accent:${escapeAttribute(region.accent)};">
+                <span class="map-spot__dot"></span>
+                <span class="map-spot__label">${escapeHtml(region.label)}</span>
+              </button>
+            `;
+          }).join("")}
+        </div>
+      `;
+
+      mapPanel.innerHTML = buildMapPanel(firstRegion);
+
+      if (!mapContainer.dataset.bound) {
+        mapContainer.addEventListener("click", function (event) {
+          const button = event.target.closest("[data-map-spot]");
+          if (!(button instanceof HTMLButtonElement)) {
+            return;
+          }
+
+          const regionId = button.dataset.mapSpot;
+          const region = content.mapRegions.find(function (item) {
+            return item.id === regionId;
+          });
+
+          if (!region) {
+            return;
+          }
+
+          Array.from(mapContainer.querySelectorAll("[data-map-spot]")).forEach(function (item) {
+            item.classList.toggle("is-active", item === button);
+          });
+          mapPanel.innerHTML = buildMapPanel(region);
+        });
+
+        mapContainer.dataset.bound = "1";
+      }
     }
 
     if (spotlightsContainer) {
@@ -214,11 +281,41 @@
 
       spotlightsContainer.innerHTML = items.map(buildCard).join("");
     }
+
+    if (youthContainer) {
+      youthContainer.innerHTML = content.project.youthReasons
+        .map(function (item) {
+          return `
+            <article class="story-card" data-reveal>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.description)}</p>
+            </article>
+          `;
+        })
+        .join("");
+    }
+
+    if (sourcesContainer) {
+      sourcesContainer.innerHTML = content.sources.mediaLibrary
+        .map(function (item, index) {
+          return buildCard({
+            title: item.title,
+            subtitle: item.subtitle,
+            description: item.description,
+            chips: index === 0 ? ["реальные фото", "галереи", "первое впечатление"] : index === 1 ? ["карточки", "увеличение", "сравнение"] : index === 2 ? ["видео", "фольклор", "ленивая загрузка"] : ["документ", "кредиты", "проверяемость"],
+            accent: index % 2 === 0 ? "#8f4326" : "#2f5648"
+          });
+        })
+        .join("");
+    }
   }
 
   function renderPeoples() {
     const filterContainer = document.getElementById("peoples-filters");
     const grid = document.getElementById("peoples-grid");
+    const compareFirst = document.getElementById("compare-first");
+    const compareSecond = document.getElementById("compare-second");
+    const compareBoard = document.getElementById("people-compare");
 
     if (!filterContainer || !grid) {
       return;
@@ -228,6 +325,8 @@
 
     grid.innerHTML = content.peoples
       .map(function (person) {
+        const extra = getExtra("peoples", person.name);
+        const comparison = getComparisonModel(person.name);
         return `
           <article class="card card--media" data-filter-value="${escapeAttribute(person.macroRegion)}" style="--card-accent:${escapeAttribute(person.accent)};" data-reveal>
             <div class="card__toolbar">
@@ -241,13 +340,40 @@
               <span class="token">${escapeHtml(person.region)}</span>
             </div>
             <p>${escapeHtml(person.summary)}</p>
+            ${extra.uniqueness ? `
+              <div class="insight-note">
+                <p class="insight-note__label">Уникальность</p>
+                <p class="insight-note__text">${escapeHtml(extra.uniqueness)}</p>
+              </div>
+            ` : ""}
             <div class="chip-list">${person.markers.map(function (marker) {
               return `<span class="chip">${escapeHtml(marker)}</span>`;
             }).join("")}</div>
+            <div class="compare-facts">
+              <div class="compare-facts__item">
+                <span>Праздник</span>
+                <strong>${escapeHtml(comparison.festival || "—")}</strong>
+              </div>
+              <div class="compare-facts__item">
+                <span>Музыка</span>
+                <strong>${escapeHtml(comparison.music || "—")}</strong>
+              </div>
+              <div class="compare-facts__item">
+                <span>Кухня</span>
+                <strong>${escapeHtml(comparison.cuisine || "—")}</strong>
+              </div>
+              <div class="compare-facts__item">
+                <span>Ремесло</span>
+                <strong>${escapeHtml(comparison.craft || "—")}</strong>
+              </div>
+            </div>
+            ${extra.today ? `<p class="card__microcopy">${escapeHtml(extra.today)}</p>` : ""}
           </article>
         `;
       })
       .join("");
+
+    renderPeopleCompare(compareFirst, compareSecond, compareBoard);
   }
 
   function renderTraditions() {
@@ -264,8 +390,13 @@
     timeline.innerHTML = content.festivals
       .map(function (festival) {
         const candidates = buildImageCandidates(festival.name);
+        const extra = getExtra("festivals", festival.name);
+        const description = extra.symbolism
+          ? `${festival.description} Символика: ${extra.symbolism}`
+          : festival.description;
+        const detailItems = (festival.details || []).concat(extra.symbolism ? ["символика праздника"] : []);
         return `
-          <button class="tradition-card" type="button" data-filter-value="${escapeAttribute(festival.season)}" data-open-tradition data-media-title="${escapeAttribute(festival.name)}" data-media-description="${escapeAttribute(festival.description)}" data-media-meta="${escapeAttribute([festival.season, festival.people, festival.region].join("|"))}" data-media-details="${escapeAttribute((festival.details || []).join("|"))}" data-image-candidates="${escapeAttribute(candidates.join("|"))}" data-reveal>
+          <button class="tradition-card" type="button" data-filter-value="${escapeAttribute(festival.season)}" data-open-tradition data-media-title="${escapeAttribute(festival.name)}" data-media-description="${escapeAttribute(description)}" data-media-meta="${escapeAttribute([festival.season, festival.people, festival.region].join("|"))}" data-media-details="${escapeAttribute(detailItems.join("|"))}" data-image-candidates="${escapeAttribute(candidates.join("|"))}" data-reveal>
             <img class="media-source media-source--image" data-candidates="${escapeAttribute(candidates.join("|"))}" alt="${escapeAttribute(festival.name)}">
             <span class="media-source__fallback">${escapeHtml(initials(festival.name))}</span>
             <span class="tradition-card__overlay">
@@ -274,6 +405,7 @@
                 <span class="token">${escapeHtml(festival.people)}</span>
               </span>
               <strong>${escapeHtml(festival.name)}</strong>
+              ${extra.symbolism ? `<small>${escapeHtml(extra.symbolism)}</small>` : ""}
             </span>
           </button>
         `;
@@ -293,6 +425,7 @@
 
     grid.innerHTML = content.crafts
       .map(function (craft) {
+        const extra = getExtra("crafts", craft.name);
         return `
           <article class="card card--media" data-filter-value="${escapeAttribute(craft.category)}" style="--card-accent:${escapeAttribute(craft.accent)};" data-reveal>
             <div class="card__toolbar">
@@ -308,6 +441,12 @@
               <span class="token">${escapeHtml(craft.material)}</span>
             </div>
             <p>${escapeHtml(craft.description)}</p>
+            ${extra.meaning ? `
+              <div class="insight-note">
+                <p class="insight-note__label">Что означает</p>
+                <p class="insight-note__text">${escapeHtml(extra.meaning)}</p>
+              </div>
+            ` : ""}
           </article>
         `;
       })
@@ -323,6 +462,7 @@
 
     grid.innerHTML = content.cuisines
       .map(function (dish) {
+        const extra = getExtra("cuisines", dish.name);
         return `
           <article class="card card--media" style="--card-accent:#c29c54;" data-reveal>
             <div class="card__toolbar">
@@ -337,6 +477,12 @@
               <span class="token">${escapeHtml(dish.ingredients)}</span>
             </div>
             <p>${escapeHtml(dish.description)}</p>
+            ${extra.occasion ? `
+              <div class="insight-note insight-note--warm">
+                <p class="insight-note__label">Когда готовят</p>
+                <p class="insight-note__text">${escapeHtml(extra.occasion)}</p>
+              </div>
+            ` : ""}
           </article>
         `;
       })
@@ -424,6 +570,7 @@
 
     grid.innerHTML = content.routes
       .map(function (route) {
+        const extra = getExtra("routes", route.title);
         return `
           <article class="card card--media" style="--card-accent:#496f81;" data-reveal>
             <div class="card__toolbar">
@@ -433,10 +580,21 @@
               <h3>${escapeHtml(route.title)}</h3>
               <span class="badge">${escapeHtml(route.region)}</span>
             </div>
+            ${extra.format ? `
+              <div class="card__meta">
+                <span class="token">${escapeHtml(extra.format)}</span>
+              </div>
+            ` : ""}
             <p>${escapeHtml(route.description)}</p>
             <div class="chip-list">${route.highlights.map(function (point) {
               return `<span class="chip">${escapeHtml(point)}</span>`;
             }).join("")}</div>
+            ${extra.why ? `
+              <div class="insight-note insight-note--cool">
+                <p class="insight-note__label">Зачем идти по этому маршруту</p>
+                <p class="insight-note__text">${escapeHtml(extra.why)}</p>
+              </div>
+            ` : ""}
           </article>
         `;
       })
@@ -446,6 +604,7 @@
   function renderPreservation() {
     const grid = document.getElementById("preservation-grid");
     const accordion = document.getElementById("preservation-accordion");
+    const schoolActions = document.getElementById("preservation-school-actions");
 
     if (grid) {
       grid.innerHTML = content.preservation
@@ -485,6 +644,167 @@
         })
         .join("");
     }
+
+    if (schoolActions) {
+      schoolActions.innerHTML = content.project.schoolActions
+        .map(function (item) {
+          return `<span class="chip">${escapeHtml(item)}</span>`;
+        })
+        .join("");
+    }
+  }
+
+  function renderSources() {
+    const methodology = document.getElementById("sources-methodology");
+    const library = document.getElementById("sources-library");
+    const institutions = document.getElementById("sources-institutions");
+    const credits = document.getElementById("sources-credits");
+    const ethics = document.getElementById("sources-ethics");
+
+    if (methodology) {
+      methodology.innerHTML = content.sources.methodology
+        .map(function (item) {
+          return `
+            <article class="feature-card" data-reveal>
+              <div class="feature-card__topline">
+                <span class="badge">${escapeHtml(item.subtitle)}</span>
+              </div>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.description)}</p>
+            </article>
+          `;
+        })
+        .join("");
+    }
+
+    if (library) {
+      library.innerHTML = content.sources.mediaLibrary
+        .map(function (item, index) {
+          return buildCard({
+            title: item.title,
+            subtitle: item.subtitle,
+            description: item.description,
+            chips: index === 0 ? ["hero", "галереи", "реальные фото"] : index === 1 ? ["карточки", "увеличение", "визуальные детали"] : index === 2 ? ["видео", "фольклор", "плеер"] : ["кредиты", "документ", "прозрачность"],
+            accent: index % 2 === 0 ? "#8f4326" : "#496f81"
+          });
+        })
+        .join("");
+    }
+
+    if (institutions) {
+      institutions.innerHTML = content.sources.institutions
+        .map(function (item) {
+          return `
+            <article class="feature-card feature-card--link" data-reveal>
+              <div class="feature-card__topline">
+                <span class="badge">${escapeHtml(item.type)}</span>
+              </div>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.description)}</p>
+              <a class="inline-link" href="${escapeAttribute(item.url)}" target="_blank" rel="noreferrer">Открыть ресурс</a>
+            </article>
+          `;
+        })
+        .join("");
+    }
+
+    if (credits) {
+      credits.innerHTML = content.sources.credits
+        .map(function (item) {
+          return `
+            <article class="card source-credit" style="--card-accent:#b45f3f;" data-reveal>
+              <span class="card__initial" aria-hidden="true">${escapeHtml(initials(item.asset))}</span>
+              <div class="card__title-row">
+                <h3>${escapeHtml(item.asset)}</h3>
+                <span class="badge">${escapeHtml(item.source)}</span>
+              </div>
+              <p>Ключевой визуальный материал проекта. Используется как часть hero-блоков или галерей сайта.</p>
+              <a class="inline-link" href="${escapeAttribute(item.url)}" target="_blank" rel="noreferrer">Перейти к источнику</a>
+            </article>
+          `;
+        })
+        .join("");
+    }
+
+    if (ethics) {
+      ethics.innerHTML = content.sources.ethics
+        .map(function (item) {
+          return `
+            <article class="story-card" data-reveal>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.description)}</p>
+            </article>
+          `;
+        })
+        .join("");
+    }
+  }
+
+  function renderPeopleCompare(firstSelect, secondSelect, board) {
+    if (!(firstSelect instanceof HTMLSelectElement) || !(secondSelect instanceof HTMLSelectElement) || !board) {
+      return;
+    }
+
+    const optionsMarkup = content.peoples
+      .map(function (person) {
+        return `<option value="${escapeAttribute(person.name)}">${escapeHtml(person.name)}</option>`;
+      })
+      .join("");
+
+    firstSelect.innerHTML = optionsMarkup;
+    secondSelect.innerHTML = optionsMarkup;
+
+    const defaults = Array.isArray(content.compareDefaults) ? content.compareDefaults : [content.peoples[0]?.name, content.peoples[1]?.name];
+    firstSelect.value = defaults[0] || content.peoples[0].name;
+    secondSelect.value = defaults[1] || content.peoples[1].name;
+
+    function updateBoard() {
+      const firstModel = getComparisonModel(firstSelect.value);
+      const secondModel = getComparisonModel(secondSelect.value);
+
+      if (!firstModel || !secondModel) {
+        return;
+      }
+
+      board.innerHTML = `
+        <article class="compare-card" style="--card-accent:${escapeAttribute(firstModel.person.accent)};">
+          ${buildCompareCard(firstModel)}
+        </article>
+        <article class="compare-summary" data-reveal>
+          ${buildCompareSummary(firstModel, secondModel)}
+        </article>
+        <article class="compare-card" style="--card-accent:${escapeAttribute(secondModel.person.accent)};">
+          ${buildCompareCard(secondModel)}
+        </article>
+      `;
+    }
+
+    firstSelect.addEventListener("change", updateBoard);
+    secondSelect.addEventListener("change", updateBoard);
+    updateBoard();
+  }
+
+  function renderPageTakeaway(pageId) {
+    const takeaway = content.pageTakeaways?.[pageId];
+    const main = document.querySelector("main");
+
+    if (!takeaway || !main || main.querySelector("[data-page-takeaway]")) {
+      return;
+    }
+
+    main.insertAdjacentHTML(
+      "beforeend",
+      `
+        <section class="section section--contrast section--takeaway" data-page-takeaway data-reveal>
+          <div class="quote-block takeaway-block">
+            <p class="quote-block__caption">${escapeHtml(takeaway.eyebrow)}</p>
+            <p class="quote-block__text">${escapeHtml(takeaway.title)}</p>
+            <p class="takeaway-block__text">${escapeHtml(takeaway.text)}</p>
+            ${Array.isArray(takeaway.chips) ? `<div class="chip-list chip-list--center">${takeaway.chips.map(function (item) { return `<span class="chip">${escapeHtml(item)}</span>`; }).join("")}</div>` : ""}
+          </div>
+        </section>
+      `
+    );
   }
 
   function initNavigation() {
@@ -934,6 +1254,248 @@
         }).join("")}</div>
       </article>
     `;
+  }
+
+  function buildMapPanel(region) {
+    return `
+      <div class="map-panel__eyebrow">Интерактивный регион</div>
+      <h3>${escapeHtml(region.label)}</h3>
+      <p class="map-panel__lead">${escapeHtml(region.description)}</p>
+      <div class="map-panel__list">
+        <div class="map-panel__item">
+          <span>Народ</span>
+          <strong>${escapeHtml(region.people)}</strong>
+        </div>
+        <div class="map-panel__item">
+          <span>Праздник</span>
+          <strong>${escapeHtml(region.festival)}</strong>
+        </div>
+        <div class="map-panel__item">
+          <span>Музыка</span>
+          <strong>${escapeHtml(region.music)}</strong>
+        </div>
+        <div class="map-panel__item">
+          <span>Маршрут</span>
+          <strong>${escapeHtml(region.route)}</strong>
+        </div>
+      </div>
+      <div class="map-panel__actions">
+        <a class="button button--primary" href="peoples.html">Открыть народы</a>
+        <a class="button button--secondary" href="routes.html">Открыть маршруты</a>
+      </div>
+    `;
+  }
+
+  function buildCompareCard(model) {
+    return `
+      <div class="compare-card__head">
+        <span class="badge">${escapeHtml(model.person.macroRegion)}</span>
+        <h3>${escapeHtml(model.person.name)}</h3>
+        <p>${escapeHtml(model.person.region)}</p>
+      </div>
+      <p class="compare-card__summary">${escapeHtml(model.person.summary)}</p>
+      ${model.extra.uniqueness ? `
+        <div class="insight-note">
+          <p class="insight-note__label">Уникальность</p>
+          <p class="insight-note__text">${escapeHtml(model.extra.uniqueness)}</p>
+        </div>
+      ` : ""}
+      <div class="compare-facts compare-facts--stack">
+        ${buildCompareFact("Праздник", model.festival)}
+        ${buildCompareFact("Музыка", model.music)}
+        ${buildCompareFact("Кухня", model.cuisine)}
+        ${buildCompareFact("Ремесло", model.craft)}
+        ${buildCompareFact("Маршрут", model.route)}
+      </div>
+      ${model.extra.today ? `<p class="card__microcopy">${escapeHtml(model.extra.today)}</p>` : ""}
+    `;
+  }
+
+  function buildCompareSummary(firstModel, secondModel) {
+    const sharedMarkers = firstModel.person.markers.filter(function (item) {
+      return secondModel.person.markers.includes(item);
+    });
+
+    const contrastText = firstModel.person.macroRegion === secondModel.person.macroRegion
+      ? "Обе культуры живут в одной макрозоне, но раскрывают ее через разные материалы, ритмы и формы праздника."
+      : "Сравнение особенно наглядно показывает, как климат и образ жизни меняют язык дома, праздника, ремесла и музыкальной памяти.";
+
+    return `
+      <p class="map-panel__eyebrow">Режим сравнения</p>
+      <h3>Что видно рядом</h3>
+      <p class="compare-summary__text">${escapeHtml(contrastText)}</p>
+      <div class="compare-facts compare-facts--summary">
+        <div class="compare-facts__item">
+          <span>Общее</span>
+          <strong>${escapeHtml(sharedMarkers.length ? sharedMarkers.join(", ") : "уважение к памяти, семье и традиции")}</strong>
+        </div>
+        <div class="compare-facts__item">
+          <span>Различие</span>
+          <strong>${escapeHtml(`${firstModel.person.macroRegion} и ${secondModel.person.macroRegion}`)}</strong>
+        </div>
+      </div>
+      <p class="compare-summary__small">Сильная конкурсная подача возникает там, где сайт не только показывает карточки, но и помогает делать собственные выводы.</p>
+    `;
+  }
+
+  function buildCompareFact(label, value) {
+    return `
+      <div class="compare-facts__item">
+        <span>${escapeHtml(label)}</span>
+        <strong>${escapeHtml(value || "—")}</strong>
+      </div>
+    `;
+  }
+
+  function getComparisonModel(name) {
+    const person = content.peoples.find(function (item) {
+      return item.name === name;
+    });
+
+    if (!person) {
+      return null;
+    }
+
+    return {
+      person: person,
+      extra: getExtra("peoples", person.name),
+      festival: getAssociatedFestival(person.name),
+      music: getAssociatedMusic(person.name),
+      cuisine: getAssociatedCuisine(person.name),
+      craft: getAssociatedCraft(person.name),
+      route: getAssociatedRoute(person.name)
+    };
+  }
+
+  function getAssociatedFestival(name) {
+    return content.festivals.find(function (item) {
+      return matchesPeople(item.people, name);
+    })?.name || "";
+  }
+
+  function getAssociatedMusic(name) {
+    return content.music.find(function (item) {
+      return matchesPeople(item.people, name);
+    })?.name || "";
+  }
+
+  function getAssociatedCuisine(name) {
+    return content.cuisines.find(function (item) {
+      return matchesPeople(item.people, name);
+    })?.name || "";
+  }
+
+  function getAssociatedCraft(name) {
+    return content.crafts.find(function (item) {
+      return matchesPeople(item.people, name);
+    })?.name || "";
+  }
+
+  function getAssociatedRoute(name) {
+    const routeMap = {
+      "Карелы": "Северный маршрут деревянной памяти",
+      "Татары": "Волжский маршрут орнамента и праздника",
+      "Башкиры": "Волжский маршрут орнамента и праздника",
+      "Чуваши": "Волжский маршрут орнамента и праздника",
+      "Осетины": "Кавказский маршрут башен и семейной традиции",
+      "Буряты": "Байкальский маршрут степи и дацанов",
+      "Саха": "Якутский маршрут эпоса и северного искусства",
+      "Ненцы": "Арктический маршрут кочевой культуры"
+    };
+
+    return routeMap[name] || "";
+  }
+
+  function getExtra(section, key) {
+    return content.extras?.[section]?.[key] || {};
+  }
+
+  function matchesPeople(value, name) {
+    return String(value || "").toLowerCase().includes(String(name || "").toLowerCase());
+  }
+
+  function splitCounterValue(value) {
+    const raw = String(value || "").trim();
+    const numeric = parseInt(raw.replace(/[^\d]/g, ""), 10);
+    return {
+      value: Number.isFinite(numeric) ? numeric : 0,
+      suffix: raw.replace(/[\d]/g, "") || ""
+    };
+  }
+
+  function initCounters() {
+    const counters = Array.from(document.querySelectorAll("[data-counter]"));
+
+    if (!counters.length || !("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        animateCounter(entry.target);
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.4 });
+
+    counters.forEach(function (counter) {
+      observer.observe(counter);
+    });
+  }
+
+  function animateCounter(node) {
+    const targetValue = Number(node.dataset.counter || 0);
+    const suffix = node.dataset.counterSuffix || "";
+    const duration = 1200;
+    const start = performance.now();
+
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(targetValue * eased);
+      node.textContent = `${current}${suffix}`;
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  function initParallax() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const nodes = Array.from(document.querySelectorAll(".hero__visual img, [data-parallax-factor]"));
+
+    if (!nodes.length) {
+      return;
+    }
+
+    let frame = null;
+
+    function update() {
+      const scrollY = window.scrollY || 0;
+      nodes.forEach(function (node) {
+        const factor = Number(node.dataset.parallaxFactor || (node.matches(".hero__visual img") ? 0.045 : 0.08));
+        node.style.transform = `translateY(${Math.round(scrollY * factor)}px)`;
+      });
+      frame = null;
+    }
+
+    function requestTick() {
+      if (!frame) {
+        frame = requestAnimationFrame(update);
+      }
+    }
+
+    window.addEventListener("scroll", requestTick, { passive: true });
+    update();
   }
 
   function uniqueValues(items, key) {
