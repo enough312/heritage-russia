@@ -6,8 +6,12 @@
   }
 
   const IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "avif"];
-  const VIDEO_EXTENSIONS = ["mp4", "webm", "mov", "m4v", "ogg"];
-  const AUDIO_EXTENSIONS = ["mp3", "wav", "m4a", "aac", "ogg"];
+  const VIDEO_EXTENSIONS = ["mp4"];
+  const AUDIO_EXTENSIONS = ["mp3"];
+  const IMAGE_FILE_OVERRIDES = {
+    "Ысыах": ["Ысыах.webp"],
+    "Блюда из оленины и северной рыбы": ["Блюда из оленины и северной рыбы.jpeg"]
+  };
 
   const MUSIC_AUDIO_OVERRIDES = {
     "Кантеле и руническое пение": [
@@ -583,7 +587,6 @@
 
   function initMediaInteractions() {
     initImageElements();
-    initVideoElements();
 
     document.addEventListener("click", function (event) {
       const imageButton = event.target.closest("[data-open-image]");
@@ -616,6 +619,9 @@
         const card = flipButton.closest(".flip-card");
         if (card) {
           card.classList.toggle("is-flipped");
+          if (card.classList.contains("is-flipped")) {
+            ensureFlipCardMedia(card);
+          }
         }
         return;
       }
@@ -624,6 +630,7 @@
       if (fullscreenButton) {
         const media = fullscreenButton.closest(".flip-card__face")?.querySelector(".player-shell__media");
         if (media) {
+          ensureMediaLoaded(media);
           requestMediaFullscreen(media);
         }
         return;
@@ -648,11 +655,21 @@
     });
   }
 
-  function initVideoElements() {
-    Array.from(document.querySelectorAll(".player-shell__media")).forEach(function (media) {
-      const candidates = splitCandidates(media.dataset.candidates);
-      loadMediaCandidate(media, candidates, 0);
-    });
+  function ensureFlipCardMedia(card) {
+    const media = card?.querySelector(".player-shell__media");
+    if (media) {
+      ensureMediaLoaded(media);
+    }
+  }
+
+  function ensureMediaLoaded(media) {
+    if (!media || media.dataset.mediaInitialized === "1") {
+      return;
+    }
+
+    media.dataset.mediaInitialized = "1";
+    const candidates = splitCandidates(media.dataset.candidates);
+    loadMediaCandidate(media, candidates, 0);
   }
 
   function loadImageCandidate(image, candidates, index) {
@@ -865,13 +882,22 @@
   }
 
   function buildMusicMediaCandidates(name) {
+    const override = MUSIC_AUDIO_OVERRIDES[name] || [];
+    if (override.length) {
+      return uniqueList(override);
+    }
+
     const directVideo = buildCandidates(name, VIDEO_EXTENSIONS);
     const directAudio = buildCandidates(name, AUDIO_EXTENSIONS);
-    const override = MUSIC_AUDIO_OVERRIDES[name] || [];
-    return uniqueList(directVideo.concat(directAudio, override));
+    return uniqueList(directVideo.concat(directAudio));
   }
 
   function buildImageCandidates(name) {
+    const override = IMAGE_FILE_OVERRIDES[name] || [];
+    if (override.length) {
+      return uniqueList(override);
+    }
+
     return buildCandidates(name, IMAGE_EXTENSIONS);
   }
 
