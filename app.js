@@ -202,11 +202,7 @@
 
       mapContainer.innerHTML = `
         <div class="cultural-map__board" data-parallax-factor="0.08">
-          <svg class="cultural-map__shape" viewBox="0 0 860 430" aria-hidden="true">
-            <path d="M104 162c34-36 92-54 162-52 36 1 70-17 98-50 34-40 83-56 146-44 57 10 106 37 149 82 45 48 77 57 128 38 20-7 45-2 59 15 18 21 15 52-6 71-17 14-23 31-18 49 9 35-14 67-49 67H630c-48 0-76 11-111 45-33 32-70 47-112 47-53 0-94-19-124-58-24-30-58-46-101-46-52 0-92-17-117-49-30-38-26-89 9-115 16-12 25-28 25-48 0-23 10-41 30-52z" />
-            <path d="M228 274c38-12 78-14 118-5 32 7 58 4 84-10 22-12 47-19 74-19 33 0 63 10 88 30 25 19 56 27 93 24 31-3 59-13 86-30" />
-            <path d="M344 126c19 18 40 29 63 34 29 6 53 3 73-10 26-17 53-24 82-20 27 4 53 15 76 33" />
-          </svg>
+          <img class="cultural-map__image" src="assets/russia-map.svg" alt="Карта России с отмеченными культурными регионами">
           ${content.mapRegions.map(function (region) {
             const activeClass = region.id === firstRegion.id ? " is-active" : "";
             return `
@@ -788,7 +784,7 @@
     const takeaway = content.pageTakeaways?.[pageId];
     const main = document.querySelector("main");
 
-    if (!takeaway || !main || main.querySelector("[data-page-takeaway]")) {
+    if (pageId === "sources" || !takeaway || !main || main.querySelector("[data-page-takeaway]")) {
       return;
     }
 

@@ -1097,30 +1097,19 @@ main {
   border-radius: 22px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 24% 18%, rgba(194, 156, 84, 0.18), transparent 20%),
-    radial-gradient(circle at 82% 76%, rgba(73, 111, 129, 0.18), transparent 22%),
-    linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(244, 238, 228, 0.9));
+    radial-gradient(circle at 22% 16%, rgba(194, 156, 84, 0.12), transparent 18%),
+    radial-gradient(circle at 84% 78%, rgba(73, 111, 129, 0.12), transparent 20%),
+    linear-gradient(180deg, rgba(247, 251, 252, 0.96), rgba(242, 236, 227, 0.9));
 }
 
-.cultural-map__shape {
+.cultural-map__image {
   position: absolute;
-  inset: 20px;
-  width: calc(100% - 40px);
-  height: calc(100% - 40px);
-}
-
-.cultural-map__shape path:first-child {
-  fill: rgba(194, 156, 84, 0.14);
-  stroke: rgba(143, 67, 38, 0.72);
-  stroke-width: 8;
-  stroke-linejoin: round;
-}
-
-.cultural-map__shape path + path {
-  fill: none;
-  stroke: rgba(47, 86, 72, 0.42);
-  stroke-width: 5;
-  stroke-linecap: round;
+  inset: 18px;
+  width: calc(100% - 36px);
+  height: calc(100% - 36px);
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 12px 24px rgba(56, 37, 24, 0.08));
 }
 
 .map-spot {
@@ -1135,6 +1124,7 @@ main {
   box-shadow: 0 10px 20px rgba(56, 37, 24, 0.1);
   transform: translate(-50%, -50%);
   transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+  z-index: 1;
 }
 
 .map-spot:hover,
@@ -1829,6 +1819,12 @@ main {
 
   .cultural-map__board {
     min-height: 332px;
+  }
+
+  .cultural-map__image {
+    inset: 12px;
+    width: calc(100% - 24px);
+    height: calc(100% - 24px);
   }
 
   .map-spot {
