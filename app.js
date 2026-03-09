@@ -1109,15 +1109,32 @@
   function initHeaderToggle() {
     const headerInner = document.querySelector(".site-header__inner");
     const toggleButton = document.querySelector("[data-header-toggle]");
+    const nav = document.getElementById("site-nav");
 
-    if (!headerInner || !toggleButton) {
+    if (!headerInner || !toggleButton || !nav) {
       return;
+    }
+
+    function revealCurrentNavLink() {
+      const currentLink = nav.querySelector('[aria-current="page"]');
+
+      if (!(currentLink instanceof HTMLElement) || nav.scrollWidth <= nav.clientWidth) {
+        return;
+      }
+
+      currentLink.scrollIntoView({
+        block: "nearest",
+        inline: "center"
+      });
     }
 
     function applyCollapsedState(isCollapsed) {
       headerInner.classList.toggle("is-nav-collapsed", isCollapsed);
       toggleButton.setAttribute("aria-expanded", String(!isCollapsed));
       toggleButton.textContent = isCollapsed ? "Показать вкладки" : "Скрыть вкладки";
+      if (!isCollapsed) {
+        requestAnimationFrame(revealCurrentNavLink);
+      }
     }
 
     let isCollapsed = false;
@@ -1140,12 +1157,17 @@
         return;
       }
     });
+
+    window.addEventListener("resize", revealCurrentNavLink, { passive: true });
   }
 
   function initReveal() {
     const nodes = document.querySelectorAll("[data-reveal]");
 
-    if (!("IntersectionObserver" in window)) {
+    if (
+      !("IntersectionObserver" in window) ||
+      window.matchMedia("(prefers-reduced-motion: reduce), (hover: none), (pointer: coarse), (max-width: 860px)").matches
+    ) {
       nodes.forEach(function (node) {
         node.classList.add("is-visible");
       });
@@ -1463,13 +1485,16 @@
   }
 
   function initParallax() {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
     const nodes = Array.from(document.querySelectorAll(".hero__visual img, [data-parallax-factor]"));
 
     if (!nodes.length) {
+      return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce), (hover: none), (pointer: coarse), (max-width: 980px)").matches) {
+      nodes.forEach(function (node) {
+        node.style.transform = "";
+      });
       return;
     }
 
